@@ -10,10 +10,10 @@
 // need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
-#define ARM_PIN 3
-#define HAND_PIN 2
-#define BACK_PIN 4
-#define FINGER_PIN 5
+#define BACK_PIN 2
+#define HAND_PIN 3
+#define FINGER_PIN 4
+#define ARM_PIN 5
 //#define CLOCK_PIN 13
 
 // Define the array of leds
@@ -34,11 +34,12 @@ void setup() {
 
 void loop() { 
   // energy();
-  back_up();
+  // back_up();
+  // gradLight();
   // arm_side();
   // energy();
   // finger_two();
-  // finger_five();
+  finger_five();
   off();  
   // stable();
 }
@@ -48,12 +49,12 @@ void energy()
   for(int i=19;i<=23;i++)
   {
       arm_leds[i-1] = cyan;
-      FastLED.show();
   }
+  arm_leds[27]=cyan;
   arm_leds[28]=cyan;
-  arm_leds[29]=cyan;
+  FastLED.show();
   delay(500);
-  for(int i=24;i<=29;i++)
+  for(int i=24;i<=27;i++)
   {
     arm_leds[i-1]=cyan;
     FastLED.show();
@@ -179,6 +180,32 @@ void off()
 
 void arm_side()
 {
+  for(int k=1;k<=3;k++)
+  {
+      for(int j=255;j>0;j-=4)
+  {
+  for(int i=1;i<= 18;i++)
+    {
+      arm_leds[i-1]=yellow;
+      arm_leds[i-1].fadeLightBy(j); 
+      arm_leds[51+i-1]=yellow;
+      arm_leds[51+i-1].fadeLightBy(j);
+    }
+    FastLED.show();
+  }
+  for(int j=0;j<=255;j+=4)
+  {
+    for(int i=1;i<=18;i++)
+    {
+      arm_leds[i-1]=yellow;
+      arm_leds[i-1].fadeLightBy(j);
+      arm_leds[51+i-1]=yellow;
+      arm_leds[51+i-1].fadeLightBy(j);
+    }
+    FastLED.show();
+  }
+  }
+
   for(int i=1;i<=5;i++)
   {
     for(int j=1;j<=18;j++)
@@ -196,6 +223,7 @@ void arm_side()
     FastLED.show();
     delay(150);
   }
+  delay(500);
 }
 void finger_five()
 {
@@ -268,4 +296,28 @@ void stable()
     }
   }
   FastLED.show(); 
+}
+void gradLight()
+{
+  for(int j=255;j>0;j--)
+  {
+    for(int i=1;i<= BACK_NUM;i++)
+    {
+      back_leds[i-1]=cyan;
+      back_leds[i-1].fadeLightBy(j); 
+    }
+    FastLED.show();
+    // delay();
+  }
+  for(int j=0;j<=255;j++)
+  {
+    for(int i=1;i<= BACK_NUM;i++)
+    {
+      back_leds[i-1]=cyan;
+      back_leds[i-1].fadeLightBy(j);
+    }
+    FastLED.show();
+    // delay(3);
+  }
+
 }
